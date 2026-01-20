@@ -1,12 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { ScrollView, StatusBar, Text, View } from "react-native";
 
-export default function Recipe() {
+export default function RecipeScreen() {
   return (
-    <View>
-      <Text>Recipe</Text>
-    </View>
-  )
+    <ScrollView
+      contentInsetAdjustmentBehavior="automatic"
+      style={{ backgroundColor: "#e2ede5" }}
+    >
+      <StatusBar barStyle="dark-content" />
+      <View style={{ padding: 16 }}>
+        <Text style={{ color: "white", fontSize: 20 }}>Recipes</Text>
+      </View>
+    </ScrollView>
+  );
 }
-
-const styles = StyleSheet.create({})
