@@ -1,6 +1,9 @@
 import { Image } from "expo-image";
 import { StyleSheet, ScrollView, View, Text } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import SearchRecipe from "@/components/homePage/searchRecipe";
+import Stats from "@/components/homePage/stats";
+import ActionIcons from "@/components/homePage/actionIcons";
 
 export default function HomeScreen() {
   return (
@@ -13,7 +16,7 @@ export default function HomeScreen() {
             contentFit="cover"
           />
           <View>
-            <Text style={styles.name}>Atauba Gideon</Text>
+            <Text style={styles.name}>Hi, Atauba</Text>
             <Text style={styles.welcome}>Welcome back</Text>
           </View>
         </View>
@@ -25,6 +28,9 @@ export default function HomeScreen() {
           />
         </View>
       </View>
+      <SearchRecipe header="Today's Nutrition Overview"/>
+      <ActionIcons />
+      <Stats />
     </ScrollView>
   );
 }
