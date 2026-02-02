@@ -1,5 +1,7 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
+import * as Progress from "react-native-progress";
+import CalorieBar from "./calorieBar";
 
 const MacroItem = ({ label, value }: { label: string; value: string }) => {
   const [current, total] = value.split("/");
@@ -7,7 +9,6 @@ const MacroItem = ({ label, value }: { label: string; value: string }) => {
   return (
     <View style={styles.macroItem}>
       <Text style={styles.macroLabel}>{label}</Text>
-
       <Text style={styles.macroValue}>
         {current}
         <Text style={styles.macroDivider}> / </Text>
@@ -25,6 +26,7 @@ export default function Stats() {
         <Text style={styles.kcalNumber}>456</Text>
         <Text style={styles.kcalText}>kcal over</Text>
       </View>
+      <CalorieBar />
       <Text style={styles.burnedText}>Burned 650</Text>
       <View style={{ alignItems: "center" }}>
         <TouchableOpacity style={styles.button}>
@@ -36,6 +38,7 @@ export default function Stats() {
         <MacroItem label="Protein" value="120/180g" />
         <MacroItem label="Fat" value="65/90g" />
       </View>
+
     </View>
   );
 }
@@ -73,7 +76,7 @@ const styles = StyleSheet.create({
   burnedText: {
     // color: "#fff",
     fontSize: 16,
-    marginBottom: 16,
+    marginVertical: 16,
   },
 
   button: {

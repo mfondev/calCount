@@ -16,6 +16,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 
 const { Navigator } = createMaterialTopTabNavigator();
 
@@ -28,9 +30,9 @@ export const MaterialTopTabs = withLayoutContext<
 
 export default function RecipeScreen() {
   return (
-    <ScrollView
-      contentInsetAdjustmentBehavior="automatic"
-      style={{ backgroundColor: "#e2ede5" }}
+    <SafeAreaView
+    //   contentInsetAdjustmentBehavior="automatic"
+      style={{ backgroundColor: "#e2ede5", flex: 1 }}
     >
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
@@ -45,11 +47,42 @@ export default function RecipeScreen() {
         <View style={{ width: 48 }} />
       </View>
       <SearchRecipe header={"Today's Nutritious Meal Ideas"} />
-    </ScrollView>
+      <MaterialTopTabs
+        screenOptions={{
+          tabBarStyle: {
+            // backgroundColor: "#e2ede5",
+          },
+          tabBarItemStyle: {
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+          },
+          tabBarLabelStyle: {
+            textTransform: "none",
+            fontWeight: "600",
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: "#e2ede5",
+            height: "100%",
+            borderRadius: 10,
+          },
+          tabBarIndicatorContainerStyle: {
+            alignItems: "center",
+          },
+        }}
+      >
+        <MaterialTopTabs.Screen options={{ title: "Breakfast" }} name="index" />
+        <MaterialTopTabs.Screen options={{ title: "Lunch" }} name="lunch" />
+        <MaterialTopTabs.Screen options={{ title: "Dinner" }} name="dinner" />
+        <MaterialTopTabs.Screen options={{ title: "Snacks" }} name="snacks" />
+      </MaterialTopTabs>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",

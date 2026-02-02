@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     paddingHorizontal: 16,
     height: 58,
-    backgroundColor: "transparent",
+    backgroundColor: "#e9f1e9",
   },
   input: {
     flex: 1,

@@ -1,12 +1,19 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { StyleSheet, Text, View } from "react-native";
+import React from "react";
 
 export default function index() {
   return (
-    <View>
-      <Text>index</Text>
+    <View style={styles.container}>
+      <Text>hey</Text>
     </View>
-  )
+  );
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#e2ede5",
+    marginBottom: 50,
+    padding: 16,
+  },
+});
