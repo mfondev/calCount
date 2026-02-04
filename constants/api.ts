@@ -18,11 +18,15 @@ const axiosInstance = axios.create({
 });
 
 const sendMessage = async (text: string) => {
-  const res = await axiosInstance.post("", {
-    messages: [{ role: "user", content: text }],
-    model: "llama-3.3-70b-versatile",
-  });
-  return res.data.choices[0]?.message?.content;
+  try {
+    const res = await axiosInstance.post("", {
+      messages: [{ role: "user", content: text }],
+      model: "llama-3.3-70b-versatile",
+    });
+    return res.data.choices[0]?.message?.content;
+  } catch (error) {
+    console.error("Error sending message:", error);
+  }
 };
 
 // export const sendMessage = async (message: string) => {
@@ -31,4 +35,3 @@ export const useSendMessage = () => {
     mutationFn: (message: string) => sendMessage(message),
   });
 };
-;
