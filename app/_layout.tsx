@@ -34,6 +34,17 @@ export default function RootLayout() {
               }
             }}
           />
+          <Stack.Screen
+            name="askAi"
+            options={{
+              presentation: "modal",
+              title: "Modal",
+              headerShown: false,
+              contentStyle: {
+                backgroundColor: "#e2ede5"
+              }
+            }}
+          />
         </Stack>
         <StatusBar style="auto" />
       </ThemeProvider>
