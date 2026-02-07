@@ -6,6 +6,7 @@ import {
   QueryClient,
   QueryClientProvider,
 } from "@tanstack/react-query";
+import { use } from "react";
 
 const GROQ_API_KEY = "random";
 
@@ -35,3 +36,4 @@ export const useSendMessage = () => {
     mutationFn: (message: string) => sendMessage(message),
   });
 };
+
