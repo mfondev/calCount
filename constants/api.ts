@@ -8,10 +8,10 @@ import {
 } from "@tanstack/react-query";
 import { use } from "react";
 
-const GROQ_API_KEY = "random";
+const GROQ_API_KEY = process.env.EXPO_PUBLIC_GROQ_API_KEY;
 
 const axiosInstance = axios.create({
-  baseURL: "https://api.groq.com/openai/v1/chat/completions",
+  baseURL: "https://api.groq.com/openai",
   headers: {
     Authorization: `Bearer ${GROQ_API_KEY}`,
     "Content-Type": "application/json",
@@ -20,7 +20,7 @@ const axiosInstance = axios.create({
 
 const sendMessage = async (text: string) => {
   try {
-    const res = await axiosInstance.post("", {
+    const res = await axiosInstance.post("/v1/chat/completions", {
       messages: [{ role: "user", content: text }],
       model: "llama-3.3-70b-versatile",
     });
@@ -36,4 +36,4 @@ export const useSendMessage = () => {
     mutationFn: (message: string) => sendMessage(message),
   });
 };
-
+ 

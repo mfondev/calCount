@@ -6,70 +6,97 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from "react-native";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import Entypo from "@expo/vector-icons/Entypo";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { ScrollView } from "react-native";
 import { useSendMessage } from "@/constants/api";
+import AiResponse from "@/components/aiChat/aiResponse";
+
+type ChatMessage = {
+  id: string;
+  role: "user" | "ai";
+  text: string;
+};
 
 export default function AskAi() {
   const inputRef = useRef<TextInput>(null);
+  const scrollRef = useRef<ScrollView>(null);
+
   const [message, setMessage] = useState("");
-  const { mutate, isPending, error, data } = useSendMessage();
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+
+  const { mutate, isPending } = useSendMessage();
 
   const handleSend = () => {
-    if (message.trim()) {
-      console.log("Sending:", message);
-      setMessage("");
-    }
+    if (!message.trim()) return;
+
+    const userMessage: ChatMessage = {
+      id: Date.now().toString(),
+      role: "user",
+      text: message,
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setMessage(""); 
+
+    mutate(message, {
+      onSuccess: (response) => {
+        const aiMessage: ChatMessage = {
+          id: Date.now().toString() + "-ai",
+          role: "ai",
+          text: response,
+        };
+        setMessages((prev) => [...prev, aiMessage]);
+      },
+    });
   };
+
+  useEffect(() => {
+    scrollRef.current?.scrollToEnd({ animated: true });
+  }, [messages, isPending]);
 
   return (
     <KeyboardAvoidingView
       style={styles.container}
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 55 : 50}
+      keyboardVerticalOffset={60}
     >
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <View style={styles.innerContainer}>
-          <Text style={styles.title}>Ask AI</Text>
-          <View style={styles.content}>
-            <Text style={styles.subtitle}>
-              Get AI-powered insights on meals, calories, and more
-            </Text>
-          </View>
-          <View style={styles.aiButtonsContainer}>
-            <Pressable>
-              <AntDesign name="plus" size={24} color="black" />
-            </Pressable>
-            <Pressable
-              style={styles.inputContainer}
-              onPress={() => inputRef.current?.focus()}
-            >
-              <TextInput
-                ref={inputRef}
-                multiline
-                placeholder="Ask Anything"
-                style={styles.input}
-                placeholderTextColor="#000"
-                blurOnSubmit={false}
-                value={message}
-                onChangeText={setMessage}
-              />
-              <Pressable onPress={message.trim() ? handleSend : undefined}>
-                {message.trim() ? (
-                  <Ionicons name="send" size={24} color="black" />
-                ) : (
-                  <Entypo name="sound" size={24} color="black" />
-                )}
-              </Pressable>
-            </Pressable>
-          </View>
+      <Text style={styles.title}>Ask AI</Text>
+
+      <ScrollView
+        ref={scrollRef}
+        contentContainerStyle={styles.chatContainer}
+        showsVerticalScrollIndicator={false}
+      >
+        <AiResponse messages={messages} isPending={isPending} />
+      </ScrollView>
+
+      <View style={styles.aiButtonsContainer}>
+        <Pressable>
+          <AntDesign name="plus" size={24} color="black" />
+        </Pressable>
+
+        <View style={styles.inputContainer}>
+          <TextInput
+            ref={inputRef}
+            multiline
+            placeholder="Ask anything"
+            style={styles.input}
+            value={message}
+            onChangeText={setMessage}
+          />
+          <Pressable onPress={handleSend}>
+            {message.trim() ? (
+              <Ionicons name="send" size={22} color="black" />
+            ) : (
+              <Entypo name="sound" size={22} color="black" />
+            )}
+          </Pressable>
         </View>
-      </TouchableWithoutFeedback>
+      </View>
     </KeyboardAvoidingView>
   );
 }
@@ -78,11 +105,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#e2ede5",
+    padding: 20,
   },
   innerContainer: {
     flex: 1,
-    padding: 20,
-    paddingBottom: 20,
+    // padding: 20,
+    // paddingBottom: 20,
   },
   title: {
     fontSize: 24,
@@ -102,10 +130,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
+    marginVertical: 10,
+
   },
   inputContainer: {
     flexDirection: "row",
-    alignItems: "flex-end",
+    alignItems: "center",
     justifyContent: "space-between",
     borderWidth: 1,
     borderColor: "#fff",
@@ -122,4 +152,9 @@ const styles = StyleSheet.create({
     maxHeight: 100,
     minHeight: 20,
   },
-});
+  chatContainer: {
+    paddingBottom: 10,
+    flexGrow: 1,
+    justifyContent: "flex-end",
+  },
+});  
