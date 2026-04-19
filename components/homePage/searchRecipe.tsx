@@ -14,7 +14,6 @@ export default function SearchRecipe({ header }: { header?: string }) {
           placeholder="Search Recipe.."
           placeholderTextColor="#000"
         />
-
         <Ionicons name="options-sharp" size={20} color="#000" />
       </View>
     </View>

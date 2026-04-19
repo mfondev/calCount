@@ -17,21 +17,25 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import Dinner from "./dinner";
+import Lunch from "./lunch";
+import Snacks from "./snacks";
+import index from "./index";
 
+// const { Navigator } = createMaterialTopTabNavigator();
+const Tab = createMaterialTopTabNavigator();
 
-const { Navigator } = createMaterialTopTabNavigator();
-
-export const MaterialTopTabs = withLayoutContext<
-  MaterialTopTabNavigationOptions,
-  typeof Navigator,
-  TabNavigationState<ParamListBase>,
-  MaterialTopTabNavigationEventMap
->(Navigator);
+// export const MaterialTopTabs = withLayoutContext<
+//   MaterialTopTabNavigationOptions,
+//   typeof Navigator,
+//   TabNavigationState<ParamListBase>,
+//   MaterialTopTabNavigationEventMap
+// >(Navigator);
 
 export default function RecipeScreen() {
   return (
     <SafeAreaView
-    //   contentInsetAdjustmentBehavior="automatic"
+      //   contentInsetAdjustmentBehavior="automatic"
       style={{ backgroundColor: "#e2ede5", flex: 1 }}
     >
       <StatusBar barStyle="dark-content" />
@@ -47,10 +51,10 @@ export default function RecipeScreen() {
         <View style={{ width: 48 }} />
       </View>
       <SearchRecipe header={"Today's Nutritious Meal Ideas"} />
-      <MaterialTopTabs
+      {/* <MaterialTopTabs
         screenOptions={{
           tabBarStyle: {
-            // backgroundColor: "#e2ede5",
+            backgroundColor: "#e2ede5",
           },
           tabBarItemStyle: {
             paddingVertical: 8,
@@ -61,10 +65,12 @@ export default function RecipeScreen() {
             fontWeight: "600",
           },
           tabBarIndicatorStyle: {
-            backgroundColor: "#e2ede5",
+            backgroundColor: "#5b8e37",
             height: "100%",
-            borderRadius: 10,
+            borderRadius: 30,
+            
           },
+          
           tabBarIndicatorContainerStyle: {
             alignItems: "center",
           },
@@ -74,7 +80,18 @@ export default function RecipeScreen() {
         <MaterialTopTabs.Screen options={{ title: "Lunch" }} name="lunch" />
         <MaterialTopTabs.Screen options={{ title: "Dinner" }} name="dinner" />
         <MaterialTopTabs.Screen options={{ title: "Snacks" }} name="snacks" />
-      </MaterialTopTabs>
+      </MaterialTopTabs> */}
+      <Tab.Navigator 
+       screenOptions={{
+        tabBarLabelStyle: { fontSize: 12 },
+        tabBarItemStyle: { width: 100 },
+        // tabBarStyle: { backgroundColor: 'powderblue' },
+      }}>
+        <Tab.Screen name="Breakfast" component={index} />
+        <Tab.Screen name="Lunch" component={Lunch} />
+        <Tab.Screen name="Dinner" component={Dinner} />
+        <Tab.Screen name="Snacks" component={Snacks} />
+      </Tab.Navigator>
     </SafeAreaView>
   );
 }

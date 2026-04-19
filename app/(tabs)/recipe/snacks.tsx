@@ -13,7 +13,6 @@ export default function Snacks() {
    container: {
      flex: 1,
      backgroundColor: "#e2ede5",
-     marginBottom: 50,
      padding: 16,
    },
  });

@@ -13,8 +13,8 @@ export default function Dinner() {
    container: {
      flex: 1,
      backgroundColor: "#e2ede5",
-     marginBottom: 50,
-     padding: 16,
+    //  marginBottom: 50,
+    //  padding: 16,
    },
  });
  

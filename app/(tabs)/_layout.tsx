@@ -49,8 +49,9 @@
 // }
 
 // Liquid Glass Tabs Layout
-import { Icon, Label, NativeTabs } from "expo-router/unstable-native-tabs";
+import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { Platform } from "react-native";
+import { DynamicColorIOS } from "react-native";
 
 export default function TabLayout() {
   return (
@@ -60,26 +61,49 @@ export default function TabLayout() {
       iconColor="#3e9401"
       titlePositionAdjustment={{ horizontal: 8, vertical: 5 }}
       blurEffect="systemDefault"
+      labelStyle={{
+        color: DynamicColorIOS({
+          dark: "white",
+          light: "black",
+        }),
+      }}
+      tintColor={DynamicColorIOS({
+        dark: "#3e9401",
+        light: "#3e9401",
+      })}
     >
       <NativeTabs.Trigger name="index">
-        <Label hidden></Label>
+        <NativeTabs.Trigger.Label hidden>Home</NativeTabs.Trigger.Label>
         {Platform.select({
-          ios: <Icon sf="house.fill" />,
-          android: <Icon drawable="custom_android_drawable" />,
+          ios: <NativeTabs.Trigger.Icon sf="house.fill" md="home" />,
+          android: (
+            <NativeTabs.Trigger.Icon drawable="custom_android_drawable" />
+          ),
         })}
         {/* <Icon sf="house.fill" drawable="custom_android_drawable" /> */}
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="recipe">
-        <Icon sf="book.fill" drawable="custom_recipe_drawable" />
-        <Label hidden></Label>
+        <NativeTabs.Trigger.Icon
+          sf="book.fill"
+          drawable="custom_recipe_drawable"
+        />
+        <NativeTabs.Trigger.Label hidden>Recipe</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="saved">
-        <Icon sf="bookmark.fill" drawable="custom_saved_drawable" />
-        <Label hidden></Label>
+        <NativeTabs.Trigger.Icon
+          sf="bookmark.fill"
+          drawable="custom_saved_drawable"
+        />
+        {/* <NativeTabs.Trigger.Badge></NativeTabs.Trigger.Badge> */}
+
+        <NativeTabs.Trigger.Label hidden>Saved</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
       <NativeTabs.Trigger name="accounts" role="search">
-        <Icon sf="person.fill" drawable="custom_account_drawable" />
-        <Label hidden></Label>
+        <NativeTabs.Trigger.Icon
+          sf="person.fill"
+          drawable="custom_account_drawable"
+        />
+        <NativeTabs.Trigger.Label hidden>Accounts</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>
   );

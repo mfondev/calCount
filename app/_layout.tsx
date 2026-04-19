@@ -8,6 +8,11 @@ import { StatusBar } from "expo-status-bar";
 import "react-native-reanimated";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect } from "react";
+
+SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
@@ -18,10 +23,24 @@ export const unstable_settings = {
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
+  const [loaded, error] = useFonts({
+    "MaintakerDemo-ExtraBold": require("../assets/fonts/maintaker-demo/MaintakerDemo-ExtraBold.otf"),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
+
+  if (!loaded && !error) {
+    return null;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
+        <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
           <Stack.Screen
             name="modal"
@@ -30,8 +49,8 @@ export default function RootLayout() {
               title: "Modal",
               headerShown: false,
               contentStyle: {
-                backgroundColor: "#000"
-              }
+                backgroundColor: "#000",
+              },
             }}
           />
           <Stack.Screen
@@ -41,8 +60,8 @@ export default function RootLayout() {
               title: "Modal",
               headerShown: false,
               contentStyle: {
-                backgroundColor: "#e2ede5"
-              }
+                backgroundColor: "#e2ede5",
+              },
             }}
           />
         </Stack>
