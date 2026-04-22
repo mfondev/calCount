@@ -4,6 +4,7 @@
  */
 
 import { Platform } from 'react-native';
+import { green } from 'react-native-reanimated/lib/typescript/Colors';
 
 const tintColorLight = '#0a7ea4';
 const tintColorDark = '#fff';
@@ -11,13 +12,13 @@ const tintColorDark = '#fff';
 export const Colors = {
  
   primary: '#e2ede5',
-  secondary: '#1A1A1A',
+  black: '#000',
   lightGray: '#EAEAEA',
   gray: '#f7f7f7',
   grey: '#bcbcbcff',
   accent: '#807e7eff',
   tabBg: '#fefffe',
-  green: "#326833ff",
+  buttonGreen: "#3e9401",
   totalGray: '#deddddff'
 };
 
