@@ -12,8 +12,9 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Colors } from "@/constants/theme";
+import { Link } from "expo-router";
 
-export default function LoginScreen() {
+export default function LoginForm() {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,14 +31,6 @@ export default function LoginScreen() {
         style={styles.container}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
-        <View style={styles.header}>
-          {/* <Text style={styles.emoji}>🍽️</Text> */}
-          <Text style={styles.title}>Create Account</Text>
-          <Text style={styles.sub}>
-            Lets get you your personalized meal plan.
-          </Text>
-        </View>
-
         <View style={styles.form}>
           <View style={styles.fieldGroup}>
             <Text style={styles.label}>First name</Text>
@@ -84,14 +77,14 @@ export default function LoginScreen() {
 
           <TouchableOpacity style={styles.appleBtn}>
             <Image
-              source={require("../../assets/images/apple.png")}
+              source={require("../../../assets/images/apple.png")}
               style={{ width: 28, height: 20 }}
             />
             <Text style={styles.appleBtnText}>Sign in with Apple</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.googleBtn} onPress={handleGoogle}>
             <Image
-              source={require("../../assets/images/google.png")}
+              source={require("../../../assets/images/google.png")}
               style={{ width: 14, height: 14 }}
             />
 
@@ -112,12 +105,6 @@ export default function LoginScreen() {
           </TouchableOpacity>
         </View>
 
-        <View style={styles.signupRow}>
-          <Text style={styles.signupText}>Do have an account? </Text>
-          <TouchableOpacity>
-            <Text style={styles.signupLink}>Sign in</Text>
-          </TouchableOpacity>
-        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   );

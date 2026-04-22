@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { router } from "expo-router";
 import { Link } from "expo-router";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Image } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Colors } from "@/constants/theme";
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
@@ -14,7 +14,7 @@ export default function Index() {
 
   const finishOnboarding = async () => {
     await AsyncStorage.setItem(HAS_ONBOARDED_KEY, "true");
-    router.replace("/login");
+    router.replace("/createAccount");
   };
 
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -25,8 +25,11 @@ export default function Index() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaView style={styles.container}>
         <Text style={styles.title}>calCount</Text>
+        <Image
+          source={require("../../assets/images/onImage.png")}
+          style={styles.image}
+        />
       </SafeAreaView>
-
       <BottomSheet
         ref={bottomSheetRef}
         index={0}
@@ -34,7 +37,7 @@ export default function Index() {
         enablePanDownToClose
         enableDynamicSizing={false}
         backgroundStyle={{ backgroundColor: "#fff" }}
-        handleIndicatorStyle={{ backgroundColor: Colors.accent , width: 40,  }}
+        handleIndicatorStyle={{ backgroundColor: Colors.accent, width: 40 }}
       >
         <BottomSheetView style={styles.sheetContent}>
           <OnboardingCarousel />
@@ -47,7 +50,7 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingVertical: 40,
+    paddingVertical: 10,
     paddingHorizontal: 20,
     backgroundColor: Colors.primary,
   },
@@ -60,5 +63,11 @@ const styles = StyleSheet.create({
   sheetContent: {
     flex: 1,
     padding: 20,
+  },
+  image: {
+    width: 400,
+    height: 370,
+    marginLeft: -150,
+    // marginBottom: 20,
   },
 });

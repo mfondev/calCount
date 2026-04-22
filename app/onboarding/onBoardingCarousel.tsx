@@ -43,7 +43,7 @@ export default function OnboardingCarousel() {
       flatListRef.current?.scrollToIndex({ index: next, animated: true });
       setCurrentIndex(next);
     } else {
-      router.replace("/login");
+      router.replace("/createAccount");
     }
   };
 
