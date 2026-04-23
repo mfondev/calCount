@@ -7,13 +7,13 @@ const tintColorDark = '#fff';
 export const Colors = {
  
   primary: '#e2ede5',
+  buttonGreen: "#3e9401",
   black: '#000',
   lightGray: '#EAEAEA',
   gray: '#f7f7f7',
   grey: '#bcbcbcff',
   accent: '#807e7eff',
   tabBg: '#fefffe',
-  buttonGreen: "#3e9401",
   totalGray: '#deddddff'
 };
 

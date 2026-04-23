@@ -22,22 +22,11 @@ import Lunch from "./lunch";
 import Snacks from "./snacks";
 import index from "./index";
 
-// const { Navigator } = createMaterialTopTabNavigator();
 const Tab = createMaterialTopTabNavigator();
-
-// export const MaterialTopTabs = withLayoutContext<
-//   MaterialTopTabNavigationOptions,
-//   typeof Navigator,
-//   TabNavigationState<ParamListBase>,
-//   MaterialTopTabNavigationEventMap
-// >(Navigator);
 
 export default function RecipeScreen() {
   return (
-    <SafeAreaView
-      //   contentInsetAdjustmentBehavior="automatic"
-      style={{ backgroundColor: "#e2ede5", flex: 1 }}
-    >
+    <SafeAreaView style={{ backgroundColor: "#e2ede5", flex: 1 }}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
         <TouchableOpacity style={styles.backButton}>
@@ -51,42 +40,36 @@ export default function RecipeScreen() {
         <View style={{ width: 48 }} />
       </View>
       <SearchRecipe header={"Today's Nutritious Meal Ideas"} />
-      {/* <MaterialTopTabs
+      <Tab.Navigator
         screenOptions={{
           tabBarStyle: {
-            backgroundColor: "#e2ede5",
-          },
-          tabBarItemStyle: {
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-          },
-          tabBarLabelStyle: {
-            textTransform: "none",
-            fontWeight: "600",
-          },
-          tabBarIndicatorStyle: {
-            backgroundColor: "#5b8e37",
-            height: "100%",
-            borderRadius: 30,
-            
+            backgroundColor: "#fff",
+            marginHorizontal: 16,
+            borderRadius: 12,
+            elevation: 0,
+            shadowOpacity: 0,
           },
           
-          tabBarIndicatorContainerStyle: {
-            alignItems: "center",
+          tabBarIndicatorStyle: {
+            height: "70%",
+            backgroundColor: "#3e9401",
+            borderRadius: 10,
+            top: "15%",
+            // marginHorizontal: 4,
           },
+          tabBarLabelStyle: {
+            fontSize: 13,
+            fontWeight: "400",
+            textTransform: "none",
+          },
+          tabBarActiveTintColor: "#fff",
+          tabBarInactiveTintColor: "#888",
+          tabBarItemStyle: {
+            borderRadius: 220,
+          },
+          tabBarPressColor: "transparent",
         }}
       >
-        <MaterialTopTabs.Screen options={{ title: "Breakfast" }} name="index" />
-        <MaterialTopTabs.Screen options={{ title: "Lunch" }} name="lunch" />
-        <MaterialTopTabs.Screen options={{ title: "Dinner" }} name="dinner" />
-        <MaterialTopTabs.Screen options={{ title: "Snacks" }} name="snacks" />
-      </MaterialTopTabs> */}
-      <Tab.Navigator 
-       screenOptions={{
-        tabBarLabelStyle: { fontSize: 12 },
-        tabBarItemStyle: { width: 100 },
-        // tabBarStyle: { backgroundColor: 'powderblue' },
-      }}>
         <Tab.Screen name="Breakfast" component={index} />
         <Tab.Screen name="Lunch" component={Lunch} />
         <Tab.Screen name="Dinner" component={Dinner} />
@@ -105,7 +88,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingHorizontal: 16,
-    paddingVertical: 12,
   },
 
   backButton: {

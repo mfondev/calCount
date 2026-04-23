@@ -11,13 +11,17 @@ import { useColorScheme } from "@/hooks/use-color-scheme";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
+import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const HAS_ONBOARDED_KEY = "has_onboarded";
 
 SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 
 export const unstable_settings = {
-  anchor: "(tabs)",
+  anchor: "index",
 };
 
 export default function RootLayout() {
@@ -27,15 +31,35 @@ export default function RootLayout() {
     "MaintakerDemo-ExtraBold": require("../assets/fonts/maintaker-demo/MaintakerDemo-ExtraBold.otf"),
   });
 
-  useEffect(() => {
-    if (loaded || error) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded, error]);
+  // useEffect(() => {
+  //   if (loaded || error) {
+  //     SplashScreen.hideAsync();
+  //   }
+  // }, [loaded, error]);
 
-  if (!loaded && !error) {
-    return null;
-  }
+  // if (!loaded && !error) {
+  //   return null;
+  // }
+  useEffect(() => {
+  if (!loaded && !error) return; // wait for fonts
+
+  const init = async () => {
+    await SplashScreen.hideAsync();
+    
+    try {
+      const hasOnboarded = await AsyncStorage.getItem(HAS_ONBOARDED_KEY);
+      router.replace(hasOnboarded === null ? "/onboarding" : "/(tabs)");
+    } catch {
+      router.replace("/onboarding");
+    }
+  };
+
+  init();
+}, [loaded, error]);
+
+// if (!loaded && !error) {
+//   return null; // ← keep this!
+// }
 
   return (
     <QueryClientProvider client={queryClient}>
