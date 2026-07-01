@@ -47,10 +47,14 @@ export default function RootLayout() {
     await SplashScreen.hideAsync();
     
     try {
+          await AsyncStorage.removeItem(HAS_ONBOARDED_KEY);
+
       const hasOnboarded = await AsyncStorage.getItem(HAS_ONBOARDED_KEY);
+      console.log("hasOnboarded:", hasOnboarded);
+      // router.replace(hasOnboarded === null ? "/(tabs)" : "/onboarding");
       router.replace(hasOnboarded === null ? "/onboarding" : "/(tabs)");
     } catch {
-      router.replace("/onboarding");
+      router.replace("/(tabs)");
     }
   };
 

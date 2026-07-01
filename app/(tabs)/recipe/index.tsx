@@ -12,6 +12,10 @@ export default function index() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {meals.map((meal, i) => (
         <View key={i} style={styles.card}>
+          <View>
+            <Text></Text>
+            <Text></Text>
+          </View>
           <View style={styles.image} />
           <View style={styles.info}>
             <Text style={styles.mealName}>{meal.name}</Text>
@@ -35,6 +39,7 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 10,
   },
+
   card: {
     flexDirection: "row",
     alignItems: "center",
@@ -43,6 +48,10 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     padding: 12,
   },
+  timeContainer:{
+    
+  },
+
   image: {
     width: 52,
     height: 52,
