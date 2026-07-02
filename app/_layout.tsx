@@ -31,39 +31,28 @@ export default function RootLayout() {
     "MaintakerDemo-ExtraBold": require("../assets/fonts/maintaker-demo/MaintakerDemo-ExtraBold.otf"),
   });
 
-  // useEffect(() => {
-  //   if (loaded || error) {
-  //     SplashScreen.hideAsync();
-  //   }
-  // }, [loaded, error]);
+  useEffect(() => {
+    if (!loaded && !error) return;
+
+    const init = async () => {
+      await SplashScreen.hideAsync();
+
+      try {
+        const hasOnboarded = await AsyncStorage.getItem(HAS_ONBOARDED_KEY);
+        router.replace(hasOnboarded === null ? "/onboarding" : "/(tabs)");
+      } catch (err) {
+        console.log("Init failed:", err);
+        // router.replace("/onboarding");
+        router.replace("/(tabs)");
+      }
+    };
+
+    init();
+  }, [loaded, error]);
 
   // if (!loaded && !error) {
-  //   return null;
+  //   return null; // ← keep this!
   // }
-  useEffect(() => {
-  if (!loaded && !error) return; // wait for fonts
-
-  const init = async () => {
-    await SplashScreen.hideAsync();
-    
-    try {
-          await AsyncStorage.removeItem(HAS_ONBOARDED_KEY);
-
-      const hasOnboarded = await AsyncStorage.getItem(HAS_ONBOARDED_KEY);
-      console.log("hasOnboarded:", hasOnboarded);
-      // router.replace(hasOnboarded === null ? "/(tabs)" : "/onboarding");
-      router.replace(hasOnboarded === null ? "/onboarding" : "/(tabs)");
-    } catch {
-      router.replace("/(tabs)");
-    }
-  };
-
-  init();
-}, [loaded, error]);
-
-// if (!loaded && !error) {
-//   return null; // ← keep this!
-// }
 
   return (
     <QueryClientProvider client={queryClient}>

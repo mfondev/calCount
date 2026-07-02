@@ -7,7 +7,7 @@ export default function SearchRecipe({ header }: { header?: string }) {
   return (
     <View style={styles.container}>
       <Text style={styles.subtitle}>Today's</Text>
-      <Text style={styles.title}>Nutritious Meal Ideas</Text>
+      <Text style={styles.title}>{header}</Text>
       <View style={styles.searchBar}>
         <AntDesign name="search" size={20} color="black" />
         <TextInput

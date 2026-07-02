@@ -39,7 +39,7 @@ export default function RecipeScreen() {
         <Text style={styles.headerTitle}>Recipe</Text>
         <View style={{ width: 48 }} />
       </View>
-      <SearchRecipe header={"Today's Nutritious Meal Ideas"} />
+      <SearchRecipe header={"Nutritious Meal Ideas"} />
       <Tab.Navigator
         screenOptions={{
           tabBarStyle: {

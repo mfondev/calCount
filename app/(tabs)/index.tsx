@@ -30,7 +30,7 @@ export default function HomeScreen() {
             />
           </View>
         </View>
-        <SearchRecipe header="Today's Nutrition Overview"/>
+        <SearchRecipe header="Nutrition Insights"/>
         <ActionIcons />
         <Stats />
       </ScrollView>
