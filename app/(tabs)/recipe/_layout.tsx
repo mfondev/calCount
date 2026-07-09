@@ -5,8 +5,6 @@ import {
   MaterialTopTabNavigationEventMap,
   MaterialTopTabNavigationOptions,
 } from "@react-navigation/material-top-tabs";
-import { ParamListBase, TabNavigationState } from "@react-navigation/native";
-import { withLayoutContext } from "expo-router";
 import React from "react";
 import {
   ScrollView,
@@ -22,7 +20,7 @@ import Lunch from "./lunch";
 import Snacks from "./snacks";
 import index from "./index";
 
-const Tab = createMaterialTopTabNavigator();
+const TopTab = createMaterialTopTabNavigator();
 
 export default function RecipeScreen() {
   return (
@@ -40,22 +38,23 @@ export default function RecipeScreen() {
         <View style={{ width: 48 }} />
       </View>
       <SearchRecipe header={"Nutritious Meal Ideas"} />
-      <Tab.Navigator
+      <TopTab.Navigator
+        backBehavior="history"
         screenOptions={{
           tabBarStyle: {
             backgroundColor: "#fff",
             marginHorizontal: 16,
             borderRadius: 12,
-            elevation: 0,
             shadowOpacity: 0,
           },
-          
           tabBarIndicatorStyle: {
             height: "70%",
             backgroundColor: "#3e9401",
             borderRadius: 10,
             top: "15%",
-            // marginHorizontal: 4,
+            width: "22%",
+            marginHorizontal: 4,
+            
           },
           tabBarLabelStyle: {
             fontSize: 13,
@@ -63,18 +62,18 @@ export default function RecipeScreen() {
             textTransform: "none",
           },
           tabBarActiveTintColor: "#fff",
-          tabBarInactiveTintColor: "#888",
+          tabBarInactiveTintColor: "#000",
           tabBarItemStyle: {
             borderRadius: 220,
           },
           tabBarPressColor: "transparent",
         }}
       >
-        <Tab.Screen name="Breakfast" component={index} />
-        <Tab.Screen name="Lunch" component={Lunch} />
-        <Tab.Screen name="Dinner" component={Dinner} />
-        <Tab.Screen name="Snacks" component={Snacks} />
-      </Tab.Navigator>
+        <TopTab.Screen name="Breakfast" component={index} />
+        <TopTab.Screen name="Lunch" component={Lunch} />
+        <TopTab.Screen name="Dinner" component={Dinner} />
+        <TopTab.Screen name="Snacks" component={Snacks} />
+      </TopTab.Navigator>
     </SafeAreaView>
   );
 }
