@@ -2,8 +2,6 @@ import SearchRecipe from "@/components/homePage/searchRecipe";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import {
   createMaterialTopTabNavigator,
-  MaterialTopTabNavigationEventMap,
-  MaterialTopTabNavigationOptions,
 } from "@react-navigation/material-top-tabs";
 import React from "react";
 import {
@@ -19,10 +17,18 @@ import Dinner from "./dinner";
 import Lunch from "./lunch";
 import Snacks from "./snacks";
 import index from "./index";
+import { Stack } from 'expo-router';
+
 
 const TopTab = createMaterialTopTabNavigator();
 
-export default function RecipeScreen() {
+export const anotherLayout = () =>{ 
+  <Stack>
+    <Stack.Screen name='meal/[id]'/>
+  </Stack>
+}
+
+export default function RecipeLayout() {
   return (
     <SafeAreaView style={{ backgroundColor: "#e2ede5", flex: 1 }}>
       <StatusBar barStyle="dark-content" />

@@ -2,11 +2,39 @@ import { ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 const meals = [
-  { name: "Avocado Toast", calories: "320 kcal", description: "Sourdough w/ Chili Flakes" },
-  { name: "Greek Yogurt Bowl", calories: "280 kcal", description: "Yogurt w/ Berries" },
-  { name: "Oat Pancakes", calories: "410 kcal", description: "Banana w/ Maple Syrup" },
+  {
+    id: 1,
+    name: "Grilled Chicken Salad",
+    calories: "350 kcal",
+    description: "Chicken w/ Fresh Veggies",
+  },
+  {
+    id: 2,
+    name: "Quinoa Bowl",
+    calories: "400 kcal",
+    description: "Quinoa w/ Avocado & Beans",
+  },
+  {
+    id: 3,
+    name: "Avocado Toast",
+    calories: "320 kcal",
+    description: "Sourdough w/ Chili Flakes",
+  },
+  {
+    id: 4,
+    name: "Greek Yogurt Bowl",
+    calories: "280 kcal",
+    description: "Yogurt w/ Berries",
+  },
+  {
+    id: 5,
+    name: "Oat Pancakes",
+    calories: "410 kcal",
+    description: "Banana w/ Maple Syrup",
+  },
 ];
 
 export default function index() {
@@ -14,10 +42,6 @@ export default function index() {
 
   const toggleSaved = (index: number) => {
     setSavedMeals((prev) => ({ ...prev, [index]: !prev[index] }));
-  };
-
-  const handleSeeRecipe = (mealName: string) => {
-    console.log("See recipe pressed:", mealName);
   };
 
   return (
@@ -42,13 +66,19 @@ export default function index() {
               {meal.calories} {meal.description}
             </Text>
 
-            <Link
-            href={"/"}
-              style={styles.recipeButton}
-              // onPress={() => handleSeeRecipe(meal.name)}
-            >
-              <Text style={styles.recipeText}>See Recipe</Text>
-              <Ionicons name="arrow-forward" size={13} color="#fff" />
+            <Link href={`/recipe/meal/${meal.id}`} asChild>
+              <Pressable
+                style={styles.recipeButton}
+                onPress={() =>
+                  console.log(
+                    "pressed, navigating to",
+                    `/recipe/meal/${meal.id}`,
+                  )
+                }
+              >
+                <Text style={styles.recipeText}>See Recipe</Text>
+                <MaterialIcons name="arrow-right" size={16} color="#fff" />
+              </Pressable>
             </Link>
           </View>
 
@@ -111,19 +141,18 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   mealMeta: {
-    fontSize: 12,
+    fontSize: 13,
     color: "#8a8f8a",
     marginBottom: 10,
   },
   recipeButton: {
     flexDirection: "row",
     alignItems: "center",
-    gap: 4,
     alignSelf: "flex-start",
     backgroundColor: "#000",
     borderRadius: 10,
     padding: 6,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
   },
   recipeText: {
     fontSize: 12,
