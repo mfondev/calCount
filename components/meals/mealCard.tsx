@@ -14,6 +14,8 @@ type Meal = {
 };
 
 export default function MealCard({ meal }: { meal: Meal }) {
+    console.log(meal.id);
+    
   const [saved, setSaved] = useState(false);
 
   return (
@@ -35,7 +37,6 @@ export default function MealCard({ meal }: { meal: Meal }) {
         <Text style={styles.mealMeta}>
           {meal.calories} {meal.description}
         </Text>
-
         <Link href={`/recipe/meal/${meal.id}`} asChild>
           <Pressable style={styles.recipeButton}>
             <Text style={styles.recipeText}>See Recipe</Text>
@@ -43,7 +44,6 @@ export default function MealCard({ meal }: { meal: Meal }) {
           </Pressable>
         </Link>
       </View>
-
       <View style={styles.image} />
     </View>
   );
