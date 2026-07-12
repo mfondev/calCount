@@ -13,6 +13,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { router } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { SavedMealsProvider } from "@/utils/mealContext";
 
 const HAS_ONBOARDED_KEY = "has_onboarded";
 
@@ -55,36 +56,39 @@ export default function RootLayout() {
   // }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="modal"
-            options={{
-              presentation: "modal",
-              title: "Modal",
-              headerShown: false,
-              contentStyle: {
-                backgroundColor: "#000",
-              },
-            }}
-          />
-          <Stack.Screen
-            name="askAi"
-            options={{
-              presentation: "modal",
-              title: "Modal",
-              headerShown: false,
-              contentStyle: {
-                backgroundColor: "#e2ede5",
-              },
-            }}
-          />
-          
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </QueryClientProvider>
+    <SavedMealsProvider>
+      <QueryClientProvider client={queryClient}>
+        <ThemeProvider
+          value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+        >
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="modal"
+              options={{
+                presentation: "modal",
+                title: "Modal",
+                headerShown: false,
+                contentStyle: {
+                  backgroundColor: "#000",
+                },
+              }}
+            />
+            <Stack.Screen
+              name="askAi"
+              options={{
+                presentation: "modal",
+                title: "Modal",
+                headerShown: false,
+                contentStyle: {
+                  backgroundColor: "#e2ede5",
+                },
+              }}
+            />
+          </Stack>
+          <StatusBar style="auto" />
+        </ThemeProvider>
+      </QueryClientProvider>
+    </SavedMealsProvider>
   );
 }

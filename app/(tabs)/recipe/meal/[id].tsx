@@ -4,6 +4,7 @@ import {
   Text,
   View,
   Pressable,
+  Image,
 } from "react-native";
 import React from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -11,11 +12,14 @@ import { meals } from "@/utils/data";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSavedMeals } from "@/utils/mealContext";
 
 export default function MealId() {
   const params = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const recipe = meals.find((m) => m.id === parseInt(params.id));
+    const { isSaved, toggleSaved } = useSavedMeals();
+
 
   if (!recipe) {
     return (
@@ -40,12 +44,16 @@ export default function MealId() {
               color="black"
             />
           </Pressable>
-          <Pressable style={styles.saveButton} hitSlop={8}>
+          <Pressable style={styles.saveButton} hitSlop={8} onPress={() => toggleSaved(recipe.id)}>
             <Ionicons name="bookmark-outline" size={20} color="#1a1a1a" />
           </Pressable>
         </View>
 
-        <View style={styles.imagePlaceholder} />
+        <Image
+          source={{ uri: recipe.imageUrl }}
+          style={styles.imagePlaceholder}
+          resizeMode="cover"
+        />
 
         <View style={styles.body}>
           {recipe.category && (
@@ -53,25 +61,26 @@ export default function MealId() {
               <Text style={styles.badgeText}>{recipe.category}</Text>
             </View>
           )}
-
           <Text style={styles.title}>{recipe.name}</Text>
           <Text style={styles.subtitle}>{recipe.description}</Text>
-
           <View style={styles.metaRow}>
             <View style={styles.metaItem}>
-              <MaterialCommunityIcons
-                name="fire"
-                size={18}
-                color="#3e9401"
-              />
+              <MaterialCommunityIcons name="fire" size={18} color="#3e9401" />
               <Text style={styles.metaText}>{recipe.calories}</Text>
             </View>
           </View>
-
           <View style={styles.divider} />
-
           <Text style={styles.sectionLabel}>Recipe</Text>
-          <Text style={styles.recipeText}>{recipe.recipe}</Text>
+          <View style={styles.stepsContainer}>
+            {recipe.recipe.map((step, index) => (
+              <View key={index} style={styles.stepRow}>
+                <View style={styles.stepNumber}>
+                  <Text style={styles.stepNumberText}>{index + 1}</Text>
+                </View>
+                <Text style={styles.stepText}>{step}</Text>
+              </View>
+            ))}
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -183,5 +192,33 @@ const styles = StyleSheet.create({
     marginTop: 40,
     fontSize: 16,
     color: "#8a8f8a",
+  },
+  stepsContainer: {
+    gap: 14,
+  },
+  stepRow: {
+    flexDirection: "row",
+    gap: 12,
+    alignItems: "flex-start",
+  },
+  stepNumber: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: "#3e9401",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 2,
+  },
+  stepNumberText: {
+    color: "#fff",
+    fontSize: 12,
+    fontWeight: "700",
+  },
+  stepText: {
+    flex: 1,
+    fontSize: 14,
+    lineHeight: 22,
+    color: "#3a3f3a",
   },
 });

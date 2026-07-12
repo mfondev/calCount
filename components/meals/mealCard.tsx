@@ -1,8 +1,9 @@
-import { StyleSheet, Text, View, Pressable } from "react-native";
+import { StyleSheet, Text, View, Pressable, Image } from "react-native";
 import React, { useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useSavedMeals } from "@/utils/mealContext";
 
 type Meal = {
   id: number;
@@ -10,19 +11,19 @@ type Meal = {
   calories: string;
   description: string;
   category?: string;
-  recipe?: string;
+  recipe: string[];
+  imageUrl?: string;
 };
 
 export default function MealCard({ meal }: { meal: Meal }) {
-    console.log(meal.id);
-    
-  const [saved, setSaved] = useState(false);
+  const { isSaved, toggleSaved } = useSavedMeals();
+  const saved = isSaved(meal.id);
 
   return (
     <View style={styles.card}>
-      <Pressable
+     <Pressable
         style={styles.saveButton}
-        onPress={() => setSaved((prev) => !prev)}
+        onPress={() => toggleSaved(meal.id)}
         hitSlop={8}
       >
         <Ionicons
@@ -44,7 +45,7 @@ export default function MealCard({ meal }: { meal: Meal }) {
           </Pressable>
         </Link>
       </View>
-      <View style={styles.image} />
+      <Image source={{ uri: meal.imageUrl }} style={styles.image} />
     </View>
   );
 }

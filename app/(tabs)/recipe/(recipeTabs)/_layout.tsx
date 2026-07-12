@@ -24,15 +24,8 @@ export default function RecipeLayout() {
     <SafeAreaView style={{ backgroundColor: "#e2ede5", flex: 1 }}>
       <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <MaterialCommunityIcons
-            name="arrow-left-thin"
-            size={24}
-            color="black"
-          />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>Recipe</Text>
-        <View style={{ width: 48 }} />
+      
       </View>
       <SearchRecipe header={"Nutritious Meal Ideas"} />
       <TopTab.Navigator
@@ -83,22 +76,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 16,
-  },
-
-  backButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 1,
-    borderColor: "#fff",
+    marginTop: 10,
   },
 
   headerTitle: {
     fontSize: 20,
-    fontWeight: "600",
+    // fontWeight: "600",
     textAlign: "center",
     flex: 1,
     color: "#000",
