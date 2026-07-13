@@ -18,8 +18,7 @@ export default function MealId() {
   const params = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const recipe = meals.find((m) => m.id === parseInt(params.id));
-    const { isSaved, toggleSaved } = useSavedMeals();
-
+  const { isSaved, toggleSaved } = useSavedMeals();
 
   if (!recipe) {
     return (
@@ -28,6 +27,8 @@ export default function MealId() {
       </SafeAreaView>
     );
   }
+
+  const saved = isSaved(recipe.id);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,8 +45,16 @@ export default function MealId() {
               color="black"
             />
           </Pressable>
-          <Pressable style={styles.saveButton} hitSlop={8} onPress={() => toggleSaved(recipe.id)}>
-            <Ionicons name="bookmark-outline" size={20} color="#1a1a1a" />
+          <Pressable
+            style={styles.saveButton}
+            hitSlop={8}
+            onPress={() => toggleSaved(recipe.id)}
+          >
+            <Ionicons
+              name={saved ? "bookmark" : "bookmark-outline"}
+              size={16}
+              color={saved ? "#3e9401" : "#1a1a1a"}
+            />
           </Pressable>
         </View>
 
