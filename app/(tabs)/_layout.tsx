@@ -52,9 +52,12 @@
 import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { Platform } from "react-native";
 import { DynamicColorIOS } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 
 export default function TabLayout() {
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <NativeTabs
       minimizeBehavior="onScrollDown"
       backgroundColor="black"
@@ -106,5 +109,6 @@ export default function TabLayout() {
         <NativeTabs.Trigger.Label hidden>Accounts</NativeTabs.Trigger.Label>
       </NativeTabs.Trigger>
     </NativeTabs>
+    </GestureHandlerRootView>
   );
 }

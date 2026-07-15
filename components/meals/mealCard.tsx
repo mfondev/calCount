@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useSavedMeals } from "@/utils/mealContext";
+import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 
 type Meal = {
   id: number;
@@ -15,13 +16,33 @@ type Meal = {
   imageUrl?: string;
 };
 
-export default function MealCard({ meal }: { meal: Meal }) {
-  const { isSaved, toggleSaved } = useSavedMeals();
+export default function MealCard({
+  meal,
+  enableSwipeToDelete = false,
+}: {
+  meal: Meal;
+  enableSwipeToDelete?: boolean;
+}) {
+  const { isSaved, toggleSaved, removeSaved } = useSavedMeals();
   const saved = isSaved(meal.id);
 
-  return (
+  const renderRightSwipeToDelete = () => {
+    return (
+      <View style={styles.deleteContainer}>
+        <Pressable
+          style={styles.deleteButton}
+          onPress={() => removeSaved(meal.id)}
+          hitSlop={8}
+        >
+          <Ionicons name="trash" size={22} color="#ff3b30" />
+        </Pressable>
+      </View>
+    );
+  };
+
+  const cardContent = (
     <View style={styles.card}>
-     <Pressable
+      <Pressable
         style={styles.saveButton}
         onPress={() => toggleSaved(meal.id)}
         hitSlop={8}
@@ -47,6 +68,16 @@ export default function MealCard({ meal }: { meal: Meal }) {
       </View>
       <Image source={{ uri: meal.imageUrl }} style={styles.image} />
     </View>
+  );
+
+  if (!enableSwipeToDelete) {
+    return cardContent;
+  }
+
+  return (
+    <Swipeable renderRightActions={renderRightSwipeToDelete}>
+      {cardContent}
+    </Swipeable>
   );
 }
 
@@ -111,5 +142,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "600",
     color: "#fff",
+  },
+  deleteContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    width: 80,
+    height: "100%",
+  },
+  deleteButton: {
+    backgroundColor: "#ffe5e3", // light reddish-white
+    justifyContent: "center",
+    alignItems: "center",
+    width: 56,
+    height: 56,
+    borderRadius: 16,
   },
 });
