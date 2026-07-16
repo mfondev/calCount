@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import LoginForm from "../components/form/loginForm";
+import LoginForm from "@/components/form/loginForm";
 import { Colors } from "@/constants/theme";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";

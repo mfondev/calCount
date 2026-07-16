@@ -77,14 +77,14 @@ export default function LoginForm() {
 
           <TouchableOpacity style={styles.appleBtn}>
             <Image
-              source={require("../../../assets/images/apple.png")}
+              source={require("../../assets/images/apple.png")}
               style={{ width: 28, height: 20 }}
             />
             <Text style={styles.appleBtnText}>Sign in with Apple</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.googleBtn} onPress={handleGoogle}>
             <Image
-              source={require("../../../assets/images/google.png")}
+              source={require("../../assets/images/google.png")}
               style={{ width: 14, height: 14 }}
             />
 
