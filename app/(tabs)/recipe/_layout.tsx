@@ -5,6 +5,7 @@ export default function RecipeLayout() {
     <Stack screenOptions={{ headerShown: false }}>
       <Stack.Screen name="(recipeTabs)" />
       <Stack.Screen name="meal/[id]" />
+      <Stack.Screen name="sheet" />
     </Stack>
   );
 }
