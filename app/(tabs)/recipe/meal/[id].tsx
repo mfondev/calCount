@@ -133,7 +133,6 @@ export default function MealId() {
             )}
           </View>
 
-          {/* Tags */}
           {recipe.tags && (
             <View style={styles.tagsRow}>
               {recipe.tags.map((tag, i) => (
