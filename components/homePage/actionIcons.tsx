@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 32,
-    marginTop: 24,
+    // marginTop: ,
   },
 
   iconWrapper: {

@@ -72,15 +72,6 @@ export default function AccountsScreen() {
         </View>
       </View>
 
-      {/* Buttons */}
-      <View style={styles.buttonRow}>
-        <TouchableOpacity style={styles.editBtn}>
-          <Text style={styles.editBtnText}>Edit Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.shareBtn}>
-          <Text style={styles.shareBtnText}>Share Profile</Text>
-        </TouchableOpacity>
-      </View>
 
       {/* Tabs */}
       <TopTab.Navigator
@@ -232,7 +223,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     gap: 40,
-    marginTop: 16,
+    marginVertical: 16,
+
   },
   statItem: {
     alignItems: "center",
@@ -245,36 +237,5 @@ const styles = StyleSheet.create({
   statLabel: {
     fontSize: 12,
     color: "#888",
-  },
-  buttonRow: {
-    flexDirection: "row",
-    gap: 10,
-    paddingHorizontal: 20,
-    marginTop: 16,
-    marginBottom: 20,
-  },
-  editBtn: {
-    flex: 1,
-    backgroundColor: "#d8d8b0",
-    paddingVertical: 12,
-    borderRadius: 24,
-    alignItems: "center",
-  },
-  editBtnText: {
-    fontWeight: "600",
-    color: "#333",
-  },
-  shareBtn: {
-    flex: 1,
-    backgroundColor: "#fff",
-    borderWidth: 1,
-    borderColor: "#ddd",
-    paddingVertical: 12,
-    borderRadius: 24,
-    alignItems: "center",
-  },
-  shareBtnText: {
-    fontWeight: "600",
-    color: "#333",
   },
 });

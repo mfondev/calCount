@@ -29,7 +29,7 @@ export default function HomeScreen() {
               color="black"
             />
           </View>
-        </View>
+        </View> 
         <SearchRecipe header="Nutrition Insights"/>
         <ActionIcons />
         <Stats />

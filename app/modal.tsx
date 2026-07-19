@@ -21,7 +21,7 @@ export default function ModalScreen() {
           icon="restaurant"
           title="Add Recipe"
           description="Create a new recipe"
-          href="/modal"
+          href="/addRecipe"
         />
 
         <ActionButton
