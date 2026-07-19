@@ -7,7 +7,11 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function SavedScreen() {
   const { savedMealIds } = useSavedMeals();
-  const savedMeals = meals.filter((m) => savedMealIds.includes(m.id));
+  // const savedMeals = meals.filter((m) => savedMealIds.includes(m.id));
+  const savedMeals = meals
+    .filter((meal) => savedMealIds.includes(meal.id))
+    .map((meal) => ({ ...meal, description: meal.description ?? "" }));
+
 
   if (savedMeals.length === 0) {
     return (

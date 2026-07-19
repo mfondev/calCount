@@ -85,6 +85,12 @@ export default function AccountsScreen() {
       {/* Tabs */}
       <TopTab.Navigator
         screenOptions={{
+            tabBarStyle: {
+            backgroundColor: "#fff",
+            marginHorizontal: 16,
+            borderRadius: 12,
+            shadowOpacity: 0,
+          },
           tabBarIndicatorStyle: {
             backgroundColor: "#3e9401",
             height: 3,
@@ -155,7 +161,7 @@ const AVATAR_SIZE = 80;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: Colors.primary,
   },
   headerWrapper: {
     width: "100%",
@@ -245,7 +251,7 @@ const styles = StyleSheet.create({
     gap: 10,
     paddingHorizontal: 20,
     marginTop: 16,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   editBtn: {
     flex: 1,

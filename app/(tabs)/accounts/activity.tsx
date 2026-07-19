@@ -55,40 +55,46 @@ const iconFor = (type: string) => {
 
 export default function Activity() {
   return (
-    <FlatList
-      data={activityData}
-      keyExtractor={(item) => item.id.toString()}
-      contentContainerStyle={styles.list}
-      renderItem={({ item }) => {
-        const icon = iconFor(item.type);
-        return (
-          <View style={styles.row}>
-            <View>
-              <Image source={{ uri: item.avatar }} style={styles.avatar} />
-              <View style={[styles.iconBadge, { backgroundColor: icon.color }]}>
-                <Ionicons name={icon.name as any} size={10} color="#fff" />
+    <View style={styles.container}>
+        <FlatList
+          data={activityData}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.list}
+          renderItem={({ item }) => {
+            const icon = iconFor(item.type);
+            return (
+              <View style={styles.row}>
+                <View>
+                  <Image source={{ uri: item.avatar }} style={styles.avatar} />
+                  <View style={[styles.iconBadge, { backgroundColor: icon.color }]}>
+                    <Ionicons name={icon.name as any} size={10} color="#fff" />
+                  </View>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.text}>
+                    <Text style={styles.user}>{item.user}</Text> {item.action}
+                    {item.target ? (
+                      <Text style={styles.target}> {item.target}</Text>
+                    ) : null}
+                  </Text>
+                  <Text style={styles.time}>{item.time} ago</Text>
+                </View>
               </View>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.text}>
-                <Text style={styles.user}>{item.user}</Text> {item.action}
-                {item.target ? (
-                  <Text style={styles.target}> {item.target}</Text>
-                ) : null}
-              </Text>
-              <Text style={styles.time}>{item.time} ago</Text>
-            </View>
-          </View>
-        );
-      }}
-      ListEmptyComponent={
-        <Text style={styles.empty}>No activity yet</Text>
-      }
-    />
+            );
+          }}
+          ListEmptyComponent={
+            <Text style={styles.empty}>No activity yet</Text>
+          }
+        />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+    container: {
+    flex: 1,
+    backgroundColor: "#e2ede5",
+  },
   list: {
     paddingHorizontal: 20,
     paddingTop: 16,
