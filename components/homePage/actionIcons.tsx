@@ -1,21 +1,26 @@
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { GlassView, isLiquidGlassAvailable } from "expo-glass-effect";
 
 export default function ActionIcons() {
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.iconWrapper}>
+      <GlassView
+        style={styles.glassView}
+        isInteractive
+        tintColor="#b9dba0"
+      >
         <Ionicons name="image-outline" size={30} color="#000" />
-      </TouchableOpacity>
+      </GlassView>
 
-      <TouchableOpacity style={styles.iconWrapper}>
+      <GlassView style={styles.glassView} isInteractive tintColor="#b9dba0">
         <Ionicons name="camera-outline" size={30} color="#000" />
-      </TouchableOpacity>
+      </GlassView>
 
-      <TouchableOpacity style={styles.iconWrapper}>
+      <GlassView style={styles.glassView} isInteractive tintColor="#b9dba0">
         <MaterialIcons name="keyboard-voice" size={30} color="#000" />
-      </TouchableOpacity>
+      </GlassView>
     </View>
   );
 }
@@ -26,7 +31,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 32,
-    // marginTop: ,
+    },
+
+  glassView: {
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 50,
+    padding: 20,
   },
 
   iconWrapper: {

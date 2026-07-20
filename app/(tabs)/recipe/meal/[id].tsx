@@ -15,6 +15,8 @@ import { useSavedMeals } from "@/utils/mealContext";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Colors } from "@/constants/theme";
+import {GlassView, isLiquidGlassAvailable} from "expo-glass-effect";
+
 
 export default function MealId() {
   const params = useLocalSearchParams<{ id: string }>();
@@ -92,7 +94,8 @@ export default function MealId() {
         index={0}
         snapPoints={snapPoints}
         enableDynamicSizing={false}
-        backgroundStyle={{ backgroundColor: "#fff" }}
+        backgroundStyle={{ backgroundColor: Colors.primary }}
+        // backgroundStyle={isLiquidGlassAvailable() ? { backgroundColor: "transparent" } : { backgroundColor: "#fff" }}
         handleIndicatorStyle={{ backgroundColor: "#ccc", width: 40 }}
       >
         <BottomSheetScrollView contentContainerStyle={styles.body}>
