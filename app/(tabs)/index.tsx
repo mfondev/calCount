@@ -24,9 +24,9 @@ export default function HomeScreen() {
   const todayTip = TIPS[new Date().getDate() % TIPS.length];
 
   return (
-    // <SafeAreaView>
+    <SafeAreaView style={styles.container}>
 
-    <View style={styles.container}>
+    <View >
       <ScrollView
         // style={styles.container}
         contentContainerStyle={styles.scrollContent}
@@ -121,7 +121,7 @@ export default function HomeScreen() {
         <Ionicons name="add" size={28} color="black" />
       </Pressable>
     </View>
-    // </SafeAreaView>
+    </SafeAreaView>
   );
 }
 
@@ -141,6 +141,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 14,
     paddingBottom: 10,
+    // paddingTop: 50,
   },
 
   leftSection: {
