@@ -43,8 +43,8 @@ export default function RootLayout() {
         router.replace(hasOnboarded === null ? "/onboarding" : "/(tabs)");
       } catch (err) {
         console.log("Init failed:", err);
-        // router.replace("/onboarding");
-        router.replace("/(tabs)");
+        router.replace("/onboarding");
+        // router.replace("/(tabs)");
       }
     };
 
