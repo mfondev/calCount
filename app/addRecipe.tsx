@@ -7,32 +7,60 @@ import {
   ScrollView,
   Image,
   Alert,
+  Pressable
 } from 'react-native'
 import React, { useState } from 'react'
 import { Colors } from '@/constants/theme'
-// If you want real image picking, install expo-image-picker:
-// import * as ImagePicker from 'expo-image-picker'
+import * as ImagePicker from 'expo-image-picker'
+import { useSavedMeals } from '@/utils/mealContext' // adjust path if needed
+import { useRouter } from 'expo-router' // remove this if you're not using expo-router
 
 const DIFFICULTIES = ['Easy', 'Medium', 'Hard']
+const CATEGORIES = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
 
 export default function AddRecipe() {
+  const { addMeal } = useSavedMeals()
+  const router = useRouter() // remove if not using expo-router
+
   const [image, setImage] = useState<string | null>(null)
   const [mealName, setMealName] = useState('')
   const [description, setDescription] = useState('')
   const [calories, setCalories] = useState('')
   const [minutes, setMinutes] = useState('')
   const [difficulty, setDifficulty] = useState<string>('Easy')
+  const [category, setCategory] = useState<string>('Breakfast')
   const [rating, setRating] = useState(0)
   const [steps, setSteps] = useState<string[]>([''])
 
+     console.log(
+    'image:', image,
+    'mealName:', mealName,
+    'description:', description,
+    'calories:', calories,
+    'minutes:', minutes,
+    'difficulty:', difficulty,
+    'category:', category,
+    'rating:', rating,
+    'steps:', steps,
+  )
+  // image picker 
   const pickImage = async () => {
-    // Example with expo-image-picker:
-    // const result = await ImagePicker.launchImageLibraryAsync({
-    //   mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    //   quality: 0.8,
-    // })
-    // if (!result.canceled) setImage(result.assets[0].uri)
-    Alert.alert('Hook up expo-image-picker here')
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (!permissionResult.granted) {
+      Alert.alert('Permission required', 'Permission to access the media library is required.');
+      return;
+    }
+
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images', 'videos'],
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+    if (!result.canceled) setImage(result.assets[0].uri)
   }
 
   const updateStep = (text: string, index: number) => {
@@ -48,19 +76,51 @@ export default function AddRecipe() {
     setSteps(steps.filter((_, i) => i !== index))
   }
 
+  const resetForm = () => {
+    setImage(null)
+    setMealName('')
+    setDescription('')
+    setCalories('')
+    setMinutes('')
+    setDifficulty('Easy')
+    setCategory('Breakfast')
+    setRating(0)
+    setSteps([''])
+  }
+
   const handleSubmit = () => {
-    const recipe = {
-      mealName,
-      image,
-      description,
-      calories,
-      minutes,
-      difficulty,
-      rating,
-      steps: steps.filter((s) => s.trim() !== ''),
+    if (!mealName.trim()) {
+      Alert.alert('Missing name', 'Please give your recipe a name.')
+      return
     }
-    console.log(recipe)
-    // TODO: send to your API / store
+
+     console.log('🔥🔥🔥 SUBMIT FIRED 🔥🔥🔥',
+    'image:', image,
+    'mealName:', mealName,
+    'description:', description,
+    'calories:', calories,
+    'minutes:', minutes,
+    'difficulty:', difficulty,
+    'category:', category,
+    'rating:', rating,
+    'steps:', steps,
+  )
+
+    addMeal({
+      category,
+      name: mealName,
+      calories: calories ? `${calories} kcal` : '',
+      time: minutes ? `${minutes} min` : '',
+      difficulty,
+      tags: [category],
+      description,
+      imageUrl: image ?? '',
+      recipe: steps.filter((s) => s.trim() !== ''),
+    })
+
+    Alert.alert('Saved', 'Your recipe has been added.')
+    resetForm()
+    router?.back() // remove if not using expo-router
   }
 
   return (
@@ -72,7 +132,7 @@ export default function AddRecipe() {
       <Text style={styles.title}>Add Recipe</Text>
 
       {/* Image */}
-      <TouchableOpacity style={styles.imagePicker} onPress={pickImage}>
+      <Pressable style={styles.imagePicker} onPress={pickImage}>
         {image ? (
           <Image source={{ uri: image }} style={styles.image} />
         ) : (
@@ -81,7 +141,7 @@ export default function AddRecipe() {
             <Text style={styles.imagePlaceholderLabel}>Add photo</Text>
           </View>
         )}
-      </TouchableOpacity>
+      </Pressable>
 
       {/* Meal name */}
       <View style={styles.field}>
@@ -107,6 +167,32 @@ export default function AddRecipe() {
           multiline
           numberOfLines={4}
         />
+      </View>
+
+      {/* Category */}
+      <View style={styles.field}>
+        <Text style={styles.label}>Category</Text>
+        <View style={styles.difficultyRow}>
+          {CATEGORIES.map((cat) => (
+            <Pressable
+              key={cat}
+              style={[
+                styles.difficultyChip,
+                category === cat && styles.difficultyChipActive,
+              ]}
+              onPress={() => setCategory(cat)}
+            >
+              <Text
+                style={[
+                  styles.difficultyChipText,
+                  category === cat && styles.difficultyChipTextActive,
+                ]}
+              >
+                {cat}
+              </Text>
+            </Pressable>
+          ))}
+        </View>
       </View>
 
       {/* Calories & Minutes row */}
@@ -140,7 +226,7 @@ export default function AddRecipe() {
         <Text style={styles.label}>Difficulty</Text>
         <View style={styles.difficultyRow}>
           {DIFFICULTIES.map((level) => (
-            <TouchableOpacity
+            <Pressable
               key={level}
               style={[
                 styles.difficultyChip,
@@ -156,7 +242,7 @@ export default function AddRecipe() {
               >
                 {level}
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </View>
       </View>
@@ -166,7 +252,7 @@ export default function AddRecipe() {
         <Text style={styles.label}>Rating</Text>
         <View style={styles.starsRow}>
           {[1, 2, 3, 4, 5].map((star) => (
-            <TouchableOpacity key={star} onPress={() => setRating(star)}>
+            <Pressable key={star} onPress={() => setRating(star)}>
               <Text
                 style={[
                   styles.star,
@@ -175,7 +261,7 @@ export default function AddRecipe() {
               >
                 ★
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           ))}
         </View>
       </View>
@@ -196,17 +282,17 @@ export default function AddRecipe() {
               onChangeText={(text) => updateStep(text, index)}
               multiline
             />
-            <TouchableOpacity
+            <Pressable
               onPress={() => removeStep(index)}
               style={styles.removeStepBtn}
             >
               <Text style={styles.removeStepText}>✕</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         ))}
-        <TouchableOpacity style={styles.addStepBtn} onPress={addStep}>
+        <Pressable style={styles.addStepBtn} onPress={addStep}>
           <Text style={styles.addStepText}>+ Add Step</Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
 
       {/* Submit */}
@@ -295,6 +381,7 @@ const styles = StyleSheet.create({
   difficultyRow: {
     flexDirection: 'row',
     gap: 10,
+    flexWrap: 'wrap',
   },
   difficultyChip: {
     paddingVertical: 10,
