@@ -71,7 +71,7 @@ export default function HomeScreen() {
         </View>
 
         <SearchRecipe header="Nutrition Insights" />
-        <ActionIcons />
+        {/* <ActionIcons /> */}
         <Stats />
 
         {/* Random tip card */}

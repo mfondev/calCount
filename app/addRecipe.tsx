@@ -7,13 +7,16 @@ import {
   ScrollView,
   Image,
   Alert,
-  Pressable
+  Pressable,
+  Modal,
 } from 'react-native'
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Colors } from '@/constants/theme'
 import * as ImagePicker from 'expo-image-picker'
 import { useSavedMeals } from '@/utils/mealContext' // adjust path if needed
 import { useRouter } from 'expo-router' // remove this if you're not using expo-router
+import { CameraView, CameraType, useCameraPermissions } from 'expo-camera'
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 const DIFFICULTIES = ['Easy', 'Medium', 'Hard']
 const CATEGORIES = ['Breakfast', 'Lunch', 'Dinner', 'Snacks']
@@ -32,24 +35,51 @@ export default function AddRecipe() {
   const [rating, setRating] = useState(0)
   const [steps, setSteps] = useState<string[]>([''])
 
-     console.log(
-    'image:', image,
-    'mealName:', mealName,
-    'description:', description,
-    'calories:', calories,
-    'minutes:', minutes,
-    'difficulty:', difficulty,
-    'category:', category,
-    'rating:', rating,
-    'steps:', steps,
-  )
-  // image picker 
+  // camera
+  const [facing, setFacing] = useState<CameraType>('back')
+  const [permission, requestPermission] = useCameraPermissions()
+  const [showCamera, setShowCamera] = useState(false)
+  const cameraRef = useRef<CameraView>(null)
+
+  const toggleCameraFacing = () => {
+    setFacing((current) => (current === 'back' ? 'front' : 'back'))
+  }
+
+  // Called when the "Take Photo" button is tapped — this is the ONLY
+  // place permission gets requested, so the rest of the form is never blocked.
+  const openCamera = async () => {
+    let currentPermission = permission
+    if (!currentPermission || !currentPermission.granted) {
+      currentPermission = await requestPermission()
+    }
+
+    if (!currentPermission?.granted) {
+      Alert.alert(
+        'Camera permission needed',
+        'Please allow camera access to take a photo, or choose one from your gallery instead.'
+      )
+      return
+    }
+
+    setShowCamera(true)
+  }
+
+  const takePicture = async () => {
+    if (!cameraRef.current) return
+    const photo = await cameraRef.current.takePictureAsync({ quality: 0.7 })
+    if (photo?.uri) {
+      setImage(photo.uri)
+    }
+    setShowCamera(false)
+  }
+
+  // image picker (gallery)
   const pickImage = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
 
     if (!permissionResult.granted) {
-      Alert.alert('Permission required', 'Permission to access the media library is required.');
-      return;
+      Alert.alert('Permission required', 'Permission to access the media library is required.')
+      return
     }
 
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -57,9 +87,8 @@ export default function AddRecipe() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    });
+    })
 
-    console.log(result);
     if (!result.canceled) setImage(result.assets[0].uri)
   }
 
@@ -94,18 +123,6 @@ export default function AddRecipe() {
       return
     }
 
-     console.log('🔥🔥🔥 SUBMIT FIRED 🔥🔥🔥',
-    'image:', image,
-    'mealName:', mealName,
-    'description:', description,
-    'calories:', calories,
-    'minutes:', minutes,
-    'difficulty:', difficulty,
-    'category:', category,
-    'rating:', rating,
-    'steps:', steps,
-  )
-
     addMeal({
       category,
       name: mealName,
@@ -131,7 +148,16 @@ export default function AddRecipe() {
     >
       <Text style={styles.title}>Add Recipe</Text>
 
-      {/* Image */}
+      {/* Photo source buttons: Camera above Gallery */}
+      <View style={styles.photoButtonsRow}>
+        <Pressable style={styles.photoOptionBtn} onPress={openCamera}>
+          {/* <Text style={styles.photoOptionIcon}>📷</Text> */}
+          <FontAwesome name="camera-retro" size={15} color="black" />
+          <Text style={styles.photoOptionText}>Take Photo</Text>
+        </Pressable>
+      </View>
+
+      {/* Image preview */}
       <Pressable style={styles.imagePicker} onPress={pickImage}>
         {image ? (
           <Image source={{ uri: image }} style={styles.image} />
@@ -253,14 +279,7 @@ export default function AddRecipe() {
         <View style={styles.starsRow}>
           {[1, 2, 3, 4, 5].map((star) => (
             <Pressable key={star} onPress={() => setRating(star)}>
-              <Text
-                style={[
-                  styles.star,
-                  star <= rating && styles.starFilled,
-                ]}
-              >
-                ★
-              </Text>
+              <Text style={[styles.star, star <= rating && styles.starFilled]}>★</Text>
             </Pressable>
           ))}
         </View>
@@ -282,10 +301,7 @@ export default function AddRecipe() {
               onChangeText={(text) => updateStep(text, index)}
               multiline
             />
-            <Pressable
-              onPress={() => removeStep(index)}
-              style={styles.removeStepBtn}
-            >
+            <Pressable onPress={() => removeStep(index)} style={styles.removeStepBtn}>
               <Text style={styles.removeStepText}>✕</Text>
             </Pressable>
           </View>
@@ -299,6 +315,26 @@ export default function AddRecipe() {
       <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
         <Text style={styles.submitText}>Save Recipe</Text>
       </TouchableOpacity>
+
+      {/* Full-screen camera modal — only mounted while taking a photo */}
+      <Modal visible={showCamera} animationType="slide">
+        <View style={styles.cameraContainer}>
+          <CameraView ref={cameraRef} style={styles.camera} facing={facing} />
+          <View style={styles.cameraTopBar}>
+            <Pressable style={styles.cameraTopBtn} onPress={() => setShowCamera(false)}>
+              <Text style={styles.cameraTopBtnText}>✕</Text>
+            </Pressable>
+            <Pressable style={styles.cameraTopBtn} onPress={toggleCameraFacing}>
+              <Text style={styles.cameraTopBtnText}>⟲</Text>
+            </Pressable>
+          </View>
+          <View style={styles.cameraBottomBar}>
+            <Pressable style={styles.captureBtn} onPress={takePicture}>
+              <View style={styles.captureBtnInner} />
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   )
 }
@@ -318,6 +354,34 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
     marginBottom: 20,
   },
+
+  // Camera / gallery choice buttons
+  photoButtonsRow: {
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 14,
+  },
+  photoOptionBtn: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E5E5E5',
+    paddingVertical: 12,
+  },
+  photoOptionIcon: {
+    fontSize: 16,
+  },
+  photoOptionText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#333',
+  },
+
   imagePicker: {
     width: '100%',
     height: 180,
@@ -472,5 +536,58 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 16,
     fontWeight: '700',
+  },
+
+  // Full-screen camera modal styles
+  cameraContainer: {
+    flex: 1,
+    backgroundColor: '#000',
+  },
+  camera: {
+    flex: 1,
+  },
+  cameraTopBar: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  cameraTopBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  cameraTopBtnText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  cameraBottomBar: {
+    position: 'absolute',
+    bottom: 50,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+  },
+  captureBtn: {
+    width: 74,
+    height: 74,
+    borderRadius: 37,
+    borderWidth: 4,
+    borderColor: '#fff',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  captureBtnInner: {
+    width: 58,
+    height: 58,
+    borderRadius: 29,
+    backgroundColor: '#fff',
   },
 })
