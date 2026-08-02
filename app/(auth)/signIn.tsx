@@ -15,7 +15,7 @@ export default function SignIn() {
             Lets get you your personalized meal plan.
           </Text>
         </View>
-        <LoginForm />
+        <LoginForm signInState={true} />
         <View style={styles.signupRow}>
           <Text style={styles.signupText}>Do have an account? </Text>
           <TouchableOpacity>

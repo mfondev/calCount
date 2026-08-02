@@ -24,7 +24,7 @@ export default function SearchRecipe({ header }: { header?: string }) {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingBottom: 12,
+    // paddingBottom: 12,
   },
   subtitle: {
     fontSize: 14,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     height: 40,
     backgroundColor: "#e9f1e9",
-    marginBottom: 8,
+    // marginBottom: 8,
   },
   input: {
     flex: 1,

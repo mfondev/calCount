@@ -14,7 +14,7 @@ import { router } from "expo-router";
 import { Colors } from "@/constants/theme";
 import { Link } from "expo-router";
 
-export default function LoginForm() {
+export default function LoginForm( signInState: any) {
   const [firstName, setFirstName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -72,7 +72,7 @@ export default function LoginForm() {
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.loginBtn} onPress={handleLogin}>
-            <Text style={styles.loginBtnText}>create</Text>
+            <Text style={styles.loginBtnText}>{signInState ? "Log in" : "Create Account"}</Text>
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.appleBtn}>

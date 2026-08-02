@@ -7,6 +7,8 @@ import Stats from "@/components/homePage/stats";
 import ActionIcons from "@/components/homePage/actionIcons";
 import { router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { GlassView } from "expo-glass-effect";
+import { isGlassEffectAPIAvailable } from "expo-glass-effect";
 
 const POPULAR_RECIPES = [
   { id: "1", name: "Jollof Rice", time: "35 min", calories: "420 kcal" },
@@ -20,107 +22,132 @@ const TIPS = [
   "Air-frying uses up to 80% less oil than deep frying",
 ];
 
+const glassSupported = isGlassEffectAPIAvailable();
+
 export default function HomeScreen() {
   const todayTip = TIPS[new Date().getDate() % TIPS.length];
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={styles.container} edges={["top"]}>
+      <View>
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.header}>
+            <View style={styles.leftSection}>
+              <Image
+                source={require("@/assets/images/avatar.svg")}
+                style={styles.avatar}
+                contentFit="cover"
+              />
+              <View>
+                <Text style={styles.name}>Hi, Atauba</Text>
+                <Text style={styles.welcome}>Welcome back</Text>
+              </View>
+            </View>
+            <Pressable
+              style={styles.notification}
+              onPress={() => router.push("/accounts/activity")}
+            >
+              <BlurView
+                intensity={50}
+                tint="light"
+                style={StyleSheet.absoluteFill}
+              />
+              <View style={styles.notificationTint} />
+              <Ionicons name="notifications" size={20} color="black" />
+            </Pressable>
+          </View>
 
-    <View >
-      <ScrollView
-        // style={styles.container}
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Header */}
-        <View style={styles.header}>
-          <View style={styles.leftSection}>
-            <Image
-              source={require("@/assets/images/avatar.svg")}
-              style={styles.avatar}
-              contentFit="cover"
-            />
-            <View>
-              <Text style={styles.name}>Hi, Atauba</Text>
-              <Text style={styles.welcome}>Welcome back</Text>
+          <View style={styles.streakBanner}>
+            <View style={styles.streakIconWrap}>
+              <Ionicons name="flame" size={18} color="#f97316" />
+            </View>
+            <Text style={styles.streakText}>
+              <Text style={styles.streakNumber}>5 day</Text> cooking streak —
+              keep it going!
+            </Text>
+          </View>
+
+          <SearchRecipe header="Nutrition Insights" />
+          <Stats />
+
+          <View style={styles.tipCard}>
+            <View style={styles.tipIconWrap}>
+              <Ionicons name="bulb" size={18} color="#3e9401" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.tipLabel}>Tip of the day</Text>
+              <Text style={styles.tipText}>{todayTip}</Text>
             </View>
           </View>
-          <Pressable
-            style={styles.notification}
-            onPress={() => router.push("/accounts/activity")}
+
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Popular Recipes</Text>
+            <Pressable onPress={() => router.push("/recipe")}>
+              <Text style={styles.seeAll}>See all</Text>
+            </Pressable>
+          </View>
+
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.recipeRow}
           >
+            {POPULAR_RECIPES.map((recipe) => (
+              <Pressable key={recipe.id} style={styles.recipeCard}>
+                <View style={styles.recipeImagePlaceholder} />
+                <Text style={styles.recipeName}>{recipe.name}</Text>
+                <View style={styles.recipeMetaRow}>
+                  <View style={styles.recipeMetaItem}>
+                    <Ionicons name="time-outline" size={12} color="#64748b" />
+                    <Text style={styles.recipeMetaText}>{recipe.time}</Text>
+                  </View>
+                  <View style={styles.recipeMetaItem}>
+                    <Ionicons name="flame-outline" size={12} color="#64748b" />
+                    <Text style={styles.recipeMetaText}>{recipe.calories}</Text>
+                  </View>
+                </View>
+              </Pressable>
+            ))}
+          </ScrollView>
+        </ScrollView>
+
+        {/* <Pressable style={styles.fab} onPress={() => router.push("/modal")}>
+        <Ionicons name="add" size={28} color="black" />
+      </Pressable> */}
+        {glassSupported ? (
+          <GlassView
+            style={styles.fab}
+            glassEffectStyle="clear"
+            tintColor="#b8ccab"
+            isInteractive
+          >
+            <Pressable
+              style={styles.fabContent}
+              onPress={() => router.push("/modal")}
+            >
+              <Ionicons name="add" size={28} color="#fff" />
+            </Pressable>
+          </GlassView>
+        ) : (
+          <View style={styles.fabFallback}>
             <BlurView
-              intensity={50}
-              tint="light"
+              intensity={40}
+              tint="dark"
               style={StyleSheet.absoluteFill}
             />
-            <View style={styles.notificationTint} />
-            <Ionicons name="notifications" size={20} color="black" />
-          </Pressable>
-        </View>
-
-        {/* Streak banner */}
-        <View style={styles.streakBanner}>
-          <View style={styles.streakIconWrap}>
-            <Ionicons name="flame" size={18} color="#f97316" />
-          </View>
-          <Text style={styles.streakText}>
-            <Text style={styles.streakNumber}>5 day</Text> cooking streak — keep
-            it going!
-          </Text>
-        </View>
-
-        <SearchRecipe header="Nutrition Insights" />
-        {/* <ActionIcons /> */}
-        <Stats />
-
-        {/* Random tip card */}
-        <View style={styles.tipCard}>
-          <View style={styles.tipIconWrap}>
-            <Ionicons name="bulb" size={18} color="#3e9401" />
-          </View>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.tipLabel}>Tip of the day</Text>
-            <Text style={styles.tipText}>{todayTip}</Text>
-          </View>
-        </View>
-
-        {/* Popular Recipes */}
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Popular Recipes</Text>
-          <Pressable onPress={() => router.push("/recipe")}>
-            <Text style={styles.seeAll}>See all</Text>
-          </Pressable>
-        </View>
-
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.recipeRow}
-        >
-          {POPULAR_RECIPES.map((recipe) => (
-            <Pressable key={recipe.id} style={styles.recipeCard}>
-              <View style={styles.recipeImagePlaceholder} />
-              <Text style={styles.recipeName}>{recipe.name}</Text>
-              <View style={styles.recipeMetaRow}>
-                <View style={styles.recipeMetaItem}>
-                  <Ionicons name="time-outline" size={12} color="#64748b" />
-                  <Text style={styles.recipeMetaText}>{recipe.time}</Text>
-                </View>
-                <View style={styles.recipeMetaItem}>
-                  <Ionicons name="flame-outline" size={12} color="#64748b" />
-                  <Text style={styles.recipeMetaText}>{recipe.calories}</Text>
-                </View>
-              </View>
+            <View style={styles.fabFallbackTint} />
+            <Pressable
+              style={styles.fabContent}
+              onPress={() => router.push("/modal")}
+            >
+              <Ionicons name="add" size={28} color="#fff" />
             </Pressable>
-          ))}
-        </ScrollView>
-      </ScrollView>
-
-      <Pressable style={styles.fab} onPress={() => router.push("/modal")}>
-        <Ionicons name="add" size={28} color="black" />
-      </Pressable>
-    </View>
+          </View>
+        )}
+      </View>
     </SafeAreaView>
   );
 }
@@ -180,7 +207,6 @@ const styles = StyleSheet.create({
   },
 
   notificationTint: {
-    ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(233, 241, 233, 0.55)",
   },
 
@@ -221,7 +247,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     gap: 10,
     marginHorizontal: 14,
-    marginTop: 6,
+    marginTop: 4,
     marginBottom: 4,
     backgroundColor: "#ffffff",
     borderRadius: 14,
@@ -329,13 +355,34 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: "#3e9401",
-    alignItems: "center",
-    justifyContent: "center",
+    overflow: "hidden",
+  },
+
+  fabFallback: {
+    position: "absolute",
+    bottom: 100,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "rgba(255,255,255,0.3)",
     elevation: 8,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
+  },
+
+  fabFallbackTint: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: "rgba(62, 148, 1, 0.55)", // brand green, translucent
+  },
+
+  fabContent: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

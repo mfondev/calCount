@@ -2,6 +2,10 @@ import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import * as Progress from "react-native-progress";
 import CalorieBar from "./calorieBar";
+import { GlassView } from "expo-glass-effect";
+import { isGlassEffectAPIAvailable } from "expo-glass-effect";
+
+const glassSupported = isGlassEffectAPIAvailable();
 
 const MacroItem = ({ label, value }: { label: string; value: string }) => {
   const [current, total] = value.split("/");
@@ -23,22 +27,34 @@ export default function Stats() {
     <View style={styles.container}>
       <Text style={styles.eatenText}>Eaten 3,143</Text>
       <View style={styles.kcalRow}>
-        <Text style={styles.kcalNumber}>456</Text>
+        <Text style={styles.kcalNumber}>346</Text>
         <Text style={styles.kcalText}>kcal over</Text>
       </View>
       <CalorieBar />
-      <Text style={styles.burnedText}>Burned 650</Text>
+      <Text style={styles.burnedText}>Burned 601</Text>
       <View style={{ alignItems: "center" }}>
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>See Stats</Text>
-        </TouchableOpacity>
+        {glassSupported ? (
+          <GlassView
+            style={styles.glassButton}
+            glassEffectStyle="clear"
+            isInteractive
+            tintColor="#f3f6f1"
+          >
+            <TouchableOpacity style={styles.button}>
+              <Text style={styles.buttonText}>See Stats</Text>
+            </TouchableOpacity>
+          </GlassView>
+        ) : (
+          <TouchableOpacity style={styles.buttonFallback}>
+            <Text style={styles.buttonText}>See Stats</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.macroContainer}>
         <MacroItem label="Carbs" value="251/535g" />
         <MacroItem label="Protein" value="120/180g" />
         <MacroItem label="Fat" value="65/90g" />
       </View>
-
     </View>
   );
 }
@@ -52,7 +68,7 @@ const styles = StyleSheet.create({
     color: "#000",
     fontSize: 16,
     textAlign: "left",
-    marginBottom: 8,
+    // marginBottom: 8,
   },
 
   kcalRow: {
@@ -79,22 +95,24 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
 
-  button: {
-    borderWidth: 1,
-    borderColor: "#fff",
+  glassButton: {
     borderRadius: 50,
+    width: "30%",
+    overflow: "hidden",
+    marginBottom: 20,
+  },
+  button: {
     paddingVertical: 10,
     alignItems: "center",
-    marginBottom: 20,
     backgroundColor: "transparent",
-    width: "30%",
   },
-
   buttonText: {
-    // color: "#fff",
     fontSize: 16,
+    color: "#000",
   },
-
+  buttonFallback: {
+    backgroundColor: "rgba(255,255,255,0.12)",
+  },
   macroContainer: {
     flexDirection: "row",
     justifyContent: "space-between",

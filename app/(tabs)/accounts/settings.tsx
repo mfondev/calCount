@@ -148,7 +148,7 @@ export default function Settings() {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#e2ede5" }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#e2ede5" }} edges={["top"]}>
       <View>
         <ScrollView
           contentContainerStyle={styles.scrollContent}

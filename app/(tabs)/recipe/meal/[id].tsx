@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     gap: 8,
-    marginBottom: 16,
+    marginBottom: 8,
   },
   tagPill: {
     borderWidth: 1,
@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   divider: {
     height: 1,
     backgroundColor: "#d3ddd5",
-    marginVertical: 16,
+    marginVertical: 8,
   },
   sectionLabel: {
     fontSize: 16,
